@@ -5,6 +5,7 @@ import Input from '../SubComponents/Input/Input';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import Message from '../SubComponents/Message/Message';
 
 const AppBody = () => {
     return (
@@ -20,7 +21,8 @@ const AppBody = () => {
                 </div>
             </div>
             <div className="appbody__chat">
-
+                <Message />
+                <Message />
             </div>
             <Input />
         </div>
