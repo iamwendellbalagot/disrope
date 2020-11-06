@@ -1,6 +1,35 @@
 .appbody {
   display: flex;
   flex-direction: column;
-  flex: 0.55;
+  flex: 0.6;
   background-color: #393e46;
+}
+
+.appbody__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #25282e;
+  box-shadow: 1px #262a30;
+  height: 44px;
+}
+
+.appbody__headerChannel {
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+}
+
+.appbody__headerChannel > span {
+  margin-right: 10px;
+  color: gray;
+  font-size: 25px;
+}
+
+.appbody__headerIcons {
+  margin-right: 20px;
+}
+
+.appbody__headerIcons > .MuiSvgIcon-root {
+  margin: auto 10px;
 }

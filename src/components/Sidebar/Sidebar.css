@@ -22,9 +22,12 @@
 }
 
 .sidebar__header {
+  display: flex;
   border-bottom: 1px solid #11151a;
   box-shadow: 1px 1px #2c2f34;
-  padding: 10px;
+  height: 44px;
+  padding-left: 20px;
+  align-items: center;
 }
 
 .channel__container {
