@@ -1,0 +1,6 @@
+.appbody {
+  display: flex;
+  flex-direction: column;
+  flex: 0.55;
+  background-color: #393e46;
+}

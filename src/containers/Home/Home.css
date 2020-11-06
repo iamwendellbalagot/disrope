@@ -1,0 +1,13 @@
+/* 
+11151a
+232931
+393e46
+4ecca3
+eeeeee */
+
+.home {
+  display: flex;
+  height: 100vh;
+  background-color: #232931;
+  color: #eeeeee;
+}

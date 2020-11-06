@@ -1,0 +1,97 @@
+.sidebar {
+  display: flex;
+  flex: 0.2;
+  width: 100%;
+}
+
+.sidebar__server {
+  flex: 0.2;
+  background-color: #11151a;
+}
+
+.sidebar__container {
+  flex: 0.8;
+}
+
+.sidebar__channel {
+  display: flex;
+  width: 100%;
+  height: 92%;
+  flex-direction: column;
+  flex: 1;
+}
+
+.sidebar__header {
+  border-bottom: 1px solid #11151a;
+  box-shadow: 1px 1px #2c2f34;
+  padding: 10px;
+}
+
+.channel__container {
+  margin-right: 15px;
+}
+
+.channel__containerHeader {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  color: gray;
+  margin-top: 50px;
+}
+
+.channel__containerHeader > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.channel__containerHeader > div > h5 {
+  font-weight: 900;
+}
+
+.channel__containerChannels {
+  display: flex;
+  color: gray;
+  margin-left: 20px;
+  align-items: center;
+}
+
+.channel__containerChannels > span {
+  font-size: 20px !important;
+}
+
+.channel__containerChannels > h5 {
+  margin-left: 7px;
+}
+
+.sidebar__user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+  border-top: #11151a 2px solid;
+}
+
+.sidebar__userProfile {
+  display: flex;
+}
+
+.sidebar__userProfile > div {
+  margin-left: 10px;
+}
+
+.sidebar__userProfile > div > span {
+  font-size: 12px;
+  color: gray;
+}
+
+.sidebar__userProfile > div > p {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sidebar__userIcons > .MuiSvgIcon-root {
+  margin: auto 3px !important;
+  color: gray;
+}
