@@ -58,6 +58,14 @@
   color: gray;
   margin-left: 20px;
   align-items: center;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 200ms;
+}
+
+.channel__containerChannels:hover {
+  background-color: #434446;
+  border-radius: 5px;
 }
 
 .channel__containerChannels > span {

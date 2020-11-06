@@ -1,6 +1,8 @@
 import React from 'react';
 import './AppBody.css';
 
+import Input from '../SubComponents/Input/Input';
+
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
@@ -17,6 +19,10 @@ const AppBody = () => {
                     <PeopleAltIcon />
                 </div>
             </div>
+            <div className="appbody__chat">
+
+            </div>
+            <Input />
         </div>
     )
 }

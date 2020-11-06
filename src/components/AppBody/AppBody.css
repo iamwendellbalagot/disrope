@@ -33,3 +33,7 @@
 .appbody__headerIcons > .MuiSvgIcon-root {
   margin: auto 10px;
 }
+
+.appbody__chat {
+  flex: 1;
+}
