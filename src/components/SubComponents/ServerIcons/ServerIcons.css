@@ -1,0 +1,13 @@
+.sidebarIcons {
+  margin-top: 10px;
+}
+
+.serverIcons__icon {
+  margin: 10px auto;
+  cursor: pointer;
+}
+
+.serverIcons__icon:hover {
+  margin: 10px auto;
+  cursor: pointer;
+}

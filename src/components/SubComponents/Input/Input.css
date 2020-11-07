@@ -1,11 +1,10 @@
 .input {
-  border-top: 1px solid gray;
+  border-top: 1px solid rgba(128, 128, 128, 0.3);
   display: flex;
   flex: 0.18;
   margin: 0 20px;
   align-items: center;
   justify-content: center;
-  opacity: 0.4;
 }
 
 .input__form {
@@ -13,14 +12,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: gray;
+  background-color: rgba(128, 128, 128, 1);
   color: white;
+  opacity: 0.5;
   padding: 10px;
   border-radius: 5px;
 }
 
 .input__form > input {
-  background-color: gray;
+  background-color: inherit;
   flex: 1;
   outline: none;
   border: none;

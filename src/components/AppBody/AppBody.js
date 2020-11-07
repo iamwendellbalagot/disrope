@@ -23,6 +23,11 @@ const AppBody = () => {
             <div className="appbody__chat">
                 <Message />
                 <Message />
+                <Message />
+                <Message />
+                <Message />
+                <Message />
+                <Message />
             </div>
             <Input />
         </div>
