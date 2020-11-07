@@ -10,6 +10,11 @@
   flex-direction: column;
   background-color: #11151a;
   align-items: center;
+  overflow-y: scroll;
+}
+
+.sidebar__server::-webkit-scrollbar {
+  display: none;
 }
 
 .sidebar__server > .MuiSvgIcon-root {

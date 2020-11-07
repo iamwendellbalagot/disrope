@@ -3,11 +3,10 @@
 }
 
 .serverIcons__icon {
-  margin: 10px auto;
+  margin-bottom: 10px;
   cursor: pointer;
 }
 
 .serverIcons__icon:hover {
-  margin: 10px auto;
   cursor: pointer;
 }

@@ -11,3 +11,33 @@ eeeeee */
   background-color: #232931;
   color: #eeeeee;
 }
+
+.home__createServer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home__createServer > input {
+  outline: none;
+  margin: 10px;
+  width: 200px;
+  padding: 5px;
+  background-color: #232931;
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.home__createServer > button {
+  background-color: #4ecca3;
+  padding: 5px;
+  width: 213px;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  color: #232931;
+  font-weight: 700;
+  cursor: pointer;
+}

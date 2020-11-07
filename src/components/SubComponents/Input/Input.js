@@ -20,7 +20,7 @@ const Input = () => {
                 <input 
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    type='email' 
+                    type='text' 
                     placeholder='Message #test-channel' />
                 <button type='submit'>Send</button>
                 <GifIcon />

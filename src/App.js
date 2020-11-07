@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {auth} from './firebase';
-import {login, logout, getUser} from './reduxSlices/userSlice';
+import {auth, db} from './firebase';
+import {login, logout, getUser, servers, getServers} from './reduxSlices/userSlice';
 import './App.css';
 import Credentials from './containers/Credentials/Credentials';
 import Home from './containers/Home/Home';
@@ -9,6 +9,7 @@ import Home from './containers/Home/Home';
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(getUser);
+  const userServers = useSelector(getServers)
 
   useEffect(() => {
     auth.onAuthStateChanged(authUser => {
@@ -26,8 +27,22 @@ function App() {
   }, [dispatch])
 
   useEffect(() => {
-    console.log(user);
-  }, [user])
+    console.log('User changed');
+    if(user){
+      db.collection('server')
+      .where('creatorUID', '==', user?.userUID)
+      .onSnapshot(snapshot => {
+        dispatch(servers(
+          snapshot.docs.map(doc => ({
+            id: doc.id,
+            data: doc.data()
+          }))
+        ))
+      })
+    }
+    
+  }, [user, dispatch])
+
 
   return (
     <div className="app">

@@ -31,7 +31,7 @@ const Credentials = () => {
                 <div>
                     <label>Email:</label>
                     <input 
-                        type="text"
+                        type="email"
                         value={email? email: ''} 
                         onChange={(e)=>setEmail(e.target.value)}
                         placeholder='Type your email'/>
