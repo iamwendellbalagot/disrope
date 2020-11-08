@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {logout} from '../../reduxSlices/userSlice';
 import {setServer, setChannel} from '../../reduxSlices/appSlice';
-import {getServer} from '../../reduxSlices/appSlice';
+import {getServer, getChannel} from '../../reduxSlices/appSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {auth, db} from '../../firebase';
 import './Sidebar.css';
@@ -17,7 +17,9 @@ import ServerIcons from '../SubComponents/ServerIcons/ServerIcons';
 const Sidebar = (props) => {
     const dispatch = useDispatch()
     const [channels, setChannels] = useState([]);
+    const [messages, setMessages] = useState([]);
     const selectedServer = useSelector(getServer);
+    const selectedChannel = useSelector(getChannel);
     
 
     const signOutUser = () =>{
@@ -49,7 +51,6 @@ const Sidebar = (props) => {
             channelName: name,
             channelID: id
         }))
-        console.log(name, id);
     }
 
     return (
