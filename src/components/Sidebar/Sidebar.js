@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {logout} from '../../reduxSlices/userSlice';
-import {setServer} from '../../reduxSlices/appSlice';
+import {setServer, setChannel} from '../../reduxSlices/appSlice';
 import {getServer} from '../../reduxSlices/appSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {auth} from '../../firebase';
+import {auth, db} from '../../firebase';
 import './Sidebar.css';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -16,11 +16,14 @@ import ServerIcons from '../SubComponents/ServerIcons/ServerIcons';
 
 const Sidebar = (props) => {
     const dispatch = useDispatch()
+    const [channels, setChannels] = useState([]);
     const selectedServer = useSelector(getServer);
+    
 
     const signOutUser = () =>{
         auth.signOut();
         dispatch(logout())
+        window.location.reload()
     }
 
     const handleServerChange =(name, id) =>{
@@ -28,6 +31,25 @@ const Sidebar = (props) => {
             serverName: name,
             serverID: id
         }))
+        db.collection('server')
+        .doc(id)
+        .collection('textChannel')
+        .orderBy('timestamp', 'asc')
+        .onSnapshot(snapshot => {
+            setChannels(snapshot.docs.map(doc => ({
+                id: doc.id,
+                data: doc.data()
+            })))
+        })
+        dispatch(setChannel(null))
+    }
+
+    const handleChannelChange = (name, id) => {
+        dispatch(setChannel({
+            channelName: name,
+            channelID: id
+        }))
+        console.log(name, id);
     }
 
     return (
@@ -53,16 +75,20 @@ const Sidebar = (props) => {
                                 <ExpandMoreIcon />
                                 <h5>Text Channels</h5>
                             </div>
-                            <AddIcon />
+                            <AddIcon
+                                onClick={() => props.openModal()}
+                             />
                         </div>
-                        <div className="channel__containerChannels">
-                            <span>#</span>
-                            <h5>general</h5>
-                        </div>
-                        <div className="channel__containerChannels">
-                            <span>#</span>
-                            <h5>gaming</h5>
-                        </div>
+                        {channels? channels.map(ch => (
+                            <div 
+                            key={ch.id} 
+                            className="channel__containerChannels"
+                            onClick={() => handleChannelChange(ch.data.channelName, ch.id)}>
+                                <span>#</span>
+                                <h5>{ch.data.channelName}</h5>
+                            </div>
+                        )) : ''}
+                        
                     </div>
                     <div className="channel__container">
                         <div className='channel__containerHeader'>

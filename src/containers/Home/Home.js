@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {getUser, getServers} from '../../reduxSlices/userSlice';
+import {getServer} from '../../reduxSlices/appSlice';
 import firebase from 'firebase';
 import {db} from '../../firebase';
 
@@ -14,8 +15,12 @@ import Avatar from '@material-ui/core/Avatar';
 const Home = () => {
     const user = useSelector(getUser);
     const userServers = useSelector(getServers);
+    const selectedServer = useSelector(getServer);
+
     const [serverInput, setServerinput] = useState('');
+    const [channelInput, setChannelInput] = useState('');
     const [modalStatus, setModalStatus] = useState(false);
+    const [createChannelSt, setCreateChannelSt] = useState(false);
 
     const handleModal = () => {
         setModalStatus(!modalStatus);
@@ -35,6 +40,29 @@ const Home = () => {
         })
     }
 
+    const openModal =() =>{
+        setCreateChannelSt(!createChannelSt)
+        console.log('Create a channel');
+    }
+
+    const handleCreateChannel = (type) =>{
+        db.collection('server')
+        .doc(selectedServer.serverID)
+        .collection('textChannel')
+        .add({
+            channelName: channelInput,
+            creatorUID: user.userUID,
+            creatorName: user.username,
+            message: [],
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(res => {
+            console.log('Succesfully created a channel');
+        })
+        setChannelInput('');
+        setCreateChannelSt(!createChannelSt)
+    }
+
     return (
         <div className='home'>
             <Sidebar 
@@ -42,9 +70,11 @@ const Home = () => {
                 userPhoto={user?.userPhoto}
                 username={user?.username}
                 handleModal={handleModal}
+                openModal = {openModal}
                 userServers= {userServers} />
             <AppBody />
             <Members />
+            {/* MODAL TO CREATE A SERVER */}
             <Modal open={modalStatus} >
                 <div className="home__createServer">
                     <Avatar 
@@ -58,6 +88,19 @@ const Home = () => {
                     <button onClick={handleCreateServer} >Create</button>
                 </div>
             </Modal>
+            <Modal open={createChannelSt}>
+                <div className="home__createChannel">
+                    <p>#{channelInput? channelInput : 'Channel Name'}</p>
+                    <input 
+                        type='text'
+                        value={channelInput}
+                        onChange={(e) => setChannelInput(e.target.value)}
+                        placeholder='Type channel name'
+                    />
+                    <button onClick={handleCreateChannel} >Create</button>
+                </div>
+            </Modal>
+            {/* MODAL TO CREATE A CHANNEL */}
         </div>
     )
 }

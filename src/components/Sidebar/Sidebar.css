@@ -72,6 +72,10 @@
   font-weight: 900;
 }
 
+.channel__containerHeader > .MuiSvgIcon-root {
+  cursor: pointer;
+}
+
 .channel__containerChannels {
   display: flex;
   color: gray;
