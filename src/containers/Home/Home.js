@@ -17,6 +17,7 @@ const Home = () => {
     const userServers = useSelector(getServers);
     const selectedServer = useSelector(getServer);
 
+    const [error, setError] = useState(false);
     const [serverInput, setServerinput] = useState('');
     const [channelInput, setChannelInput] = useState('');
     const [modalStatus, setModalStatus] = useState(false);
@@ -26,7 +27,10 @@ const Home = () => {
     const [members, setMembers] = useState([]);
 
     useEffect(() => {
-        !modalStatus && setJoinServer(false)
+        if(!modalStatus){
+            setJoinServer(false);
+            setError(false);
+        }else return
     }, [modalStatus]);
 
     useEffect(() =>{
@@ -66,7 +70,7 @@ const Home = () => {
                 userPhoto: user.userPhoto,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             })
-            setModalStatus(!modalStatus)
+            setModalStatus(!modalStatus);
             setServerinput('');
         })
     }
@@ -78,23 +82,25 @@ const Home = () => {
         .doc(id)
         .update({
             members: firebase.firestore.FieldValue.arrayUnion(user.userUID)
-        });
-
-        db.collection('server')
-        .doc(id)
-        .collection('serverMembers')
-        .add({
-            userUID: user.userUID,
-            username: user.username,
-            userPhoto: user.userPhoto,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
-        .then(res => console.log('Joined the server'));
-        
-        setJoinServerInput('');
-        setModalStatus(!modalStatus);
-        
+        .then(res =>{
+            db.collection('server')
+            .doc(id)
+            .collection('serverMembers')
+            .add({
+                userUID: user.userUID,
+                username: user.username,
+                userPhoto: user.userPhoto,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(_res =>{
+                setJoinServerInput('');
+                setModalStatus(!modalStatus);
+            });
+        })
+        .catch(err => setError(true));
     }
+
     const openJoinServerModal =() => {
         setJoinServer(true);
     }
@@ -152,12 +158,14 @@ const Home = () => {
                     <button onClick={openJoinServerModal}>Join a server</button>
                 </div>
                 : <div className='home__createServer'>
+                    <h2>Server ID</h2>
                     <input 
                         value={joinServerInput}
                         onChange={(e) => setJoinServerInput(e.target.value)}
                         placeholder='Server ID'
                         type="text"/>
                     <button onClick={() =>handleJoinServer(joinServerInput)} >Join</button>
+                    {error?<p>Server not found</p>: ''}
                 </div>}
                 
             </Modal>

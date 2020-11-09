@@ -48,6 +48,13 @@ eeeeee */
   cursor: pointer;
 }
 
+.home__createServer > p {
+  margin-top: 15px;
+  color: salmon;
+  font-size: 15px;
+  font-weight: 700;
+}
+
 .home__createChannel {
   display: flex;
   flex-direction: column;

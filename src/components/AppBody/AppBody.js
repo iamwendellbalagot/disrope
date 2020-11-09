@@ -38,6 +38,11 @@ const AppBody = () => {
         }
         
     }, [selectedChannel])
+
+    useEffect(() =>{
+        setMessages([]);
+    },[selectedServer]);
+
     return (
         <div className='appbody'>
             <div className="appbody__header">

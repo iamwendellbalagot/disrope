@@ -9,7 +9,7 @@ import './Sidebar.css';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import MicIcon from '@material-ui/icons/Mic';
-import HeadsetIcon from '@material-ui/icons/Headset';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Avatar from '@material-ui/core/Avatar';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import ServerIcons from '../SubComponents/ServerIcons/ServerIcons';
@@ -120,7 +120,7 @@ const Sidebar = (props) => {
                 <div className="sidebar__user">
                     <div className="sidebar__userProfile">
                         <Avatar
-                            onClick={signOutUser} 
+                            style={{cursor: 'pointer'}}
                             src={props.userPhoto}
                         />
                         <div>
@@ -130,7 +130,9 @@ const Sidebar = (props) => {
                     </div>
                     <div className="sidebar__userIcons">
                         <MicIcon />
-                        <HeadsetIcon />
+                        <ExitToAppIcon
+                            onClick={signOutUser} 
+                         />
                     </div>
                 </div>
             </div>

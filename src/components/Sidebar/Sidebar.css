@@ -134,5 +134,6 @@
 
 .sidebar__userIcons > .MuiSvgIcon-root {
   margin: auto 3px !important;
+  cursor: pointer;
   color: gray;
 }
