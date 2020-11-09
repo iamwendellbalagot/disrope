@@ -5,20 +5,22 @@ import './Credentials.css';
 
 const Credentials = () => {
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confPassword, setConfPassword] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(email);
-        console.log(password);
-        auth.signInWithEmailAndPassword(email, password)
-        .catch(err => alert(err.message))
-        setEmail('');
-        setPassword('');
+        console.log(email, username);
+        console.log(password, confPassword)
+        // setEmail('');
+        // setPassword('');
     }
     return (
         <div className='credentials'>
-            <img src='https://upload.wikimedia.org/wikipedia/sco/thumb/9/98/Discord_logo.svg/1200px-Discord_logo.svg.png'
+            <img
+                className='credentials__image' 
+                src='https://upload.wikimedia.org/wikipedia/sco/thumb/9/98/Discord_logo.svg/1200px-Discord_logo.svg.png'
                  alt='Logo' />
                 <form className="credentials__form credentials__register" onSubmit={handleSubmit}>
                     <h2>Hello user!</h2>
@@ -30,7 +32,15 @@ const Credentials = () => {
                             value={email? email: ''} 
                             onChange={(e)=>setEmail(e.target.value)}
                             placeholder='Type your email'/>
-                    </div> 
+                    </div>
+                    <div>
+                        <label>Username:</label>
+                        <input 
+                            type="text"
+                            value={username} 
+                            onChange={(e)=>setUsername(e.target.value)}
+                            placeholder='Type your username'/>
+                    </div>  
                     <div>
                         <label>Password:</label>
                         <input 
@@ -43,8 +53,8 @@ const Credentials = () => {
                         <label>Confirm Password:</label>
                         <input 
                             type="password" 
-                            value={password? password: ''}
-                            onChange={(e)=> setPassword(e.target.value)}
+                            value={confPassword}
+                            onChange={(e)=> setConfPassword(e.target.value)}
                             placeholder='Confirm Password'/>
                     </div>      
                     <button type='submit' >Register</button>
