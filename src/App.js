@@ -1,10 +1,12 @@
 import React, {useEffect} from 'react';
+import {Route, Switch, Redirect} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {auth, db} from './firebase';
 import {login, logout, getUser, servers, getServers} from './reduxSlices/userSlice';
 import './App.css';
 import Credentials from './containers/Credentials/Credentials';
 import Home from './containers/Home/Home';
+import Register from './containers/Credentials/Register';
 
 function App() {
   const dispatch = useDispatch();
@@ -27,7 +29,7 @@ function App() {
   }, [dispatch])
 
   useEffect(() => {
-    console.log('User changed');
+    console.log(user);
     if(user){
       db.collection('server')
       .where('members', 'array-contains', user?.userUID)
@@ -46,8 +48,17 @@ function App() {
 
   return (
     <div className="app">
-      {user?<Home />
-      :<Credentials />}
+      <Switch>
+        <Route exact path='/' >
+          {user? <Home /> : <Redirect to='/login' />}  
+        </Route>
+        <Route path='/register'  >
+          {!user? <Register /> : <Redirect to='/' />}
+        </Route>
+        <Route to='/login'  >
+          {!user? <Credentials/> : <Redirect to='/' /> }
+        </Route>
+      </Switch>
     </div>
   );
 }

@@ -36,7 +36,6 @@ const AppBody = () => {
                 })))
             })
         }
-        
     }, [selectedChannel])
 
     useEffect(() =>{

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {Route, Link} from 'react-router-dom';
-import {auth, googleProvider} from '../../firebase';
+import { Link} from 'react-router-dom';
+import {auth} from '../../firebase';
 import './Credentials.css';
 
 const Credentials = () => {
@@ -16,19 +16,13 @@ const Credentials = () => {
         setEmail('');
         setPassword('');
     }
-
-    const googleSignIn = () =>{
-        auth.signInWithPopup(googleProvider)
-        .catch(err => alert(err.message))
-    }
-
     return (
         <div className='credentials'>
             <img src='https://upload.wikimedia.org/wikipedia/sco/thumb/9/98/Discord_logo.svg/1200px-Discord_logo.svg.png'
                  alt='Logo' />
-                <form className="credentials__form" onSubmit={handleSubmit}>
-                    <h2>Welcome back!</h2>
-                    <p>We are so exited to see you again!</p>
+                <form className="credentials__form credentials__register" onSubmit={handleSubmit}>
+                    <h2>Hello user!</h2>
+                    <p>We are so exited to have you here!</p>
                     <div>
                         <label>Email:</label>
                         <input 
@@ -44,11 +38,18 @@ const Credentials = () => {
                             value={password? password: ''}
                             onChange={(e)=> setPassword(e.target.value)}
                             placeholder='Password'/>
-                    </div>   
-                    <button type='submit' >Log in</button>
-                    <div onClick={googleSignIn} className="credentials__formGoogle">Log in with Google</div>
+                    </div>
+                    <div>
+                        <label>Confirm Password:</label>
+                        <input 
+                            type="password" 
+                            value={password? password: ''}
+                            onChange={(e)=> setPassword(e.target.value)}
+                            placeholder='Confirm Password'/>
+                    </div>      
+                    <button type='submit' >Register</button>
                     <div className="credentials__formRegister">
-                        <p>Need an account? <Link to='/register' >Register</Link></p>
+                        <p>Already have an account? <Link to='/login' >Login</Link></p>
                     </div>
                 </form>
         </div>

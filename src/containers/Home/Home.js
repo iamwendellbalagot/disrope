@@ -16,6 +16,7 @@ import { Tooltip, LinearProgress } from '@material-ui/core';
 const ICON = 'https://www.clipartmax.com/png/middle/307-3072095_discord-icon-by-rengatv-cool-server-icons-discord.png';
 
 const Home = () => {
+    const dispatch = useDispatch();
     const user = useSelector(getUser);
     const userServers = useSelector(getServers);
     const selectedServer = useSelector(getServer);
@@ -184,7 +185,11 @@ const Home = () => {
             .then(res => {
                 setServerImageURL(selectedServer.serverPhoto);
                 setEditServer(!editServer)
-                setEditServerInput('');
+                dispatch(setServer({
+                    serverName: editServerInput,
+                    serverID: selectedServer.serverID,
+                    serverPhoto: selectedServer.serverPhoto
+                }))
             })
         }
         

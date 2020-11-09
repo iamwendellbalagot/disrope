@@ -28,9 +28,12 @@ const Sidebar = (props) => {
     
 
     const signOutUser = () =>{
-        auth.signOut();
-        dispatch(logout())
-        window.location.reload()
+        auth.signOut()
+        .then(res => {
+            dispatch(logout())
+            window.location.reload()
+        })
+        
     }
 
     const menuOpen = (event) =>{
