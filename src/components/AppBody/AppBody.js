@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import FlipMove from 'react-flip-move';
 import './AppBody.css';
 
 import firebase from 'firebase';
@@ -50,20 +51,22 @@ const AppBody = () => {
                 </div>
             </div>
             <div className="appbody__chat">
-                {messages?.map(message => (
-                    <Message
-                        key={message.id}
-                        message={message.data.message}
-                        username={message.data.user} 
-                        userPhoto={message.data.userPhoto}
-                        dateSent = {message.data.timestamp}
-                        isUser = {message.data.userUID === user.userUID}
-                        />
-                ))}
+                <FlipMove>
+                    {messages?.map(message => (
+                        <Message
+                            key={message.id}
+                            message={message.data.message}
+                            username={message.data.user} 
+                            userPhoto={message.data.userPhoto}
+                            dateSent = {message.data.timestamp}
+                            isUser = {message.data.userUID === user.userUID}
+                            />
+                    ))}
+                </FlipMove>
             </div>
             <Input />
         </div>
     )
-}
+};
 
 export default AppBody

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import './Message.css';
 
 import Avatar from '@material-ui/core/Avatar';
 
-const Message = ({username, message, dateSent, userPhoto, isUser}) => {
+const Message = forwardRef(({username, message, dateSent, userPhoto, isUser}, ref) => {
     return (
-        <div className='message'>
+        <div className='message' ref={ref}>
             <Avatar 
                 src={userPhoto}
             />
@@ -15,6 +15,6 @@ const Message = ({username, message, dateSent, userPhoto, isUser}) => {
             </div>
         </div>
     )
-}
+});
 
 export default Message
