@@ -20,29 +20,22 @@ const Input = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(message);
-        db.collection('server')
-        .doc(selectedServer.serverID)
-        .collection('textChannel')
-        .doc(selectedChannel.channelID)
-        .collection('messages')
-        .add({
-            message: message,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            user: user.username,
-            userPhoto: null
-        })
-        // .set(
-        //     {message:{
-        //         message: message,
-        //         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        //         user: user.username,
-        //         userID: user.userID,
-        //         userPhoto: null
-        //     }},
-        //     {merge: true}
-        // )
-        setMessage('');
+        if(selectedServer && selectedChannel){
+            db.collection('server')
+            .doc(selectedServer.serverID)
+            .collection('textChannel')
+            .doc(selectedChannel.channelID)
+            .collection('messages')
+            .add({
+                message: message,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                user: user.username,
+                userPhoto: user.userPhoto,
+                userUID: user.userUID
+            })
+            setMessage('');
+        } else return
+        
     }
     return (
         <div className='input'>

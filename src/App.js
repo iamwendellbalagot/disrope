@@ -30,7 +30,7 @@ function App() {
     console.log('User changed');
     if(user){
       db.collection('server')
-      .where('creatorUID', '==', user?.userUID)
+      .where('members', 'array-contains', user?.userUID)
       .onSnapshot(snapshot => {
         dispatch(servers(
           snapshot.docs.map(doc => ({

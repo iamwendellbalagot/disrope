@@ -21,6 +21,28 @@ const Home = () => {
     const [channelInput, setChannelInput] = useState('');
     const [modalStatus, setModalStatus] = useState(false);
     const [createChannelSt, setCreateChannelSt] = useState(false);
+    const [joinServer, setJoinServer] = useState(false);
+    const [joinServerInput, setJoinServerInput] = useState('');
+    const [members, setMembers] = useState([]);
+
+    useEffect(() => {
+        !modalStatus && setJoinServer(false)
+    }, [modalStatus]);
+
+    useEffect(() =>{
+        console.log('Server Changed');
+        selectedServer && db.collection('server')
+        .doc(selectedServer.serverID)
+        .collection('serverMembers')
+        .onSnapshot(snapshot =>{
+            setMembers(snapshot.docs.map(doc => ({
+                id: doc.id,
+                data: doc.data()
+            })))
+        })
+    },[selectedServer])
+
+    //Handlers
 
     const handleModal = () => {
         setModalStatus(!modalStatus);
@@ -32,12 +54,49 @@ const Home = () => {
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             serverName: serverInput?serverInput: 'none',
             creatorUID: user.userUID,
-            creatorName: user.username
-        }).then(res => {
+            creatorName: user.username,
+            members: [user.userUID]
+        })
+        .then(res => {
             console.log('Created Server Succesfully');
+            res.collection('serverMembers')
+            .add({
+                userUID: user.userUID,
+                username: user.username,
+                userPhoto: user.userPhoto,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
             setModalStatus(!modalStatus)
             setServerinput('');
         })
+    }
+
+    const handleJoinServer = (id) => {
+        console.log('Joining Server: ', joinServerInput);
+
+        db.collection('server')
+        .doc(id)
+        .update({
+            members: firebase.firestore.FieldValue.arrayUnion(user.userUID)
+        });
+
+        db.collection('server')
+        .doc(id)
+        .collection('serverMembers')
+        .add({
+            userUID: user.userUID,
+            username: user.username,
+            userPhoto: user.userPhoto,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(res => console.log('Joined the server'));
+        
+        setJoinServerInput('');
+        setModalStatus(!modalStatus);
+        
+    }
+    const openJoinServerModal =() => {
+        setJoinServer(true);
     }
 
     const openModal =() =>{
@@ -46,6 +105,7 @@ const Home = () => {
     }
 
     const handleCreateChannel = (type) =>{
+        console.log(selectedServer.serverID);
         db.collection('server')
         .doc(selectedServer.serverID)
         .collection('textChannel')
@@ -63,6 +123,8 @@ const Home = () => {
         setCreateChannelSt(!createChannelSt)
     }
 
+    
+
     return (
         <div className='home'>
             <Sidebar 
@@ -73,10 +135,10 @@ const Home = () => {
                 openModal = {openModal}
                 userServers= {userServers} />
             <AppBody />
-            <Members />
+            <Members members={members} />
             {/* MODAL TO CREATE A SERVER */}
             <Modal open={modalStatus} >
-                <div className="home__createServer">
+                {!joinServer?<div className="home__createServer">
                     <Avatar 
                     src='https://www.clipartmax.com/png/middle/307-3072095_discord-icon-by-rengatv-cool-server-icons-discord.png'
                     style={{height: '70px', width:'70px'}} />
@@ -86,7 +148,18 @@ const Home = () => {
                         placeholder='Server name' 
                         onChange={(e) => setServerinput(e.target.value)} />
                     <button onClick={handleCreateServer} >Create</button>
+                    <hr />
+                    <button onClick={openJoinServerModal}>Join a server</button>
                 </div>
+                : <div className='home__createServer'>
+                    <input 
+                        value={joinServerInput}
+                        onChange={(e) => setJoinServerInput(e.target.value)}
+                        placeholder='Server ID'
+                        type="text"/>
+                    <button onClick={() =>handleJoinServer(joinServerInput)} >Join</button>
+                </div>}
+                
             </Modal>
             <Modal open={createChannelSt}>
                 <div className="home__createChannel">

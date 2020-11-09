@@ -1,3 +1,5 @@
+/* 7289da */
+
 .message {
   display: flex;
   margin: 10px 0;
@@ -33,4 +35,8 @@
   font-size: 14px;
   opacity: 0.8;
   margin-bottom: 10px;
+}
+
+.isUser {
+  color: #7289da !important;
 }

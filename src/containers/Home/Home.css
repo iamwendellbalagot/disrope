@@ -19,6 +19,12 @@ eeeeee */
   align-items: center;
 }
 
+.home__createServer > hr {
+  width: 88%;
+  border-top: 1px solid gray;
+  margin: 10px;
+}
+
 .home__createServer > input {
   outline: none;
   margin: 10px;

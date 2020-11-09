@@ -6,6 +6,7 @@ import {db} from '../../firebase';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getChannel, getServer} from '../../reduxSlices/appSlice';
+import {getUser} from '../../reduxSlices/userSlice';
 
 import Input from '../SubComponents/Input/Input';
 
@@ -15,6 +16,7 @@ import Message from '../SubComponents/Message/Message';
 
 const AppBody = () => {
     const [messages, setMessages] = useState([]);
+    const user = useSelector(getUser);
     const selectedChannel = useSelector(getChannel);
     const selectedServer = useSelector(getServer);
 
@@ -53,7 +55,9 @@ const AppBody = () => {
                         key={message.id}
                         message={message.data.message}
                         username={message.data.user} 
+                        userPhoto={message.data.userPhoto}
                         dateSent = {message.data.timestamp}
+                        isUser = {message.data.userUID === user.userUID}
                         />
                 ))}
             </div>

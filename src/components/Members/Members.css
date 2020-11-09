@@ -3,3 +3,38 @@
   flex: 0.15;
   flex-direction: column;
 }
+
+.members__header {
+  display: flex;
+  border-bottom: 1px solid #11151a;
+  box-shadow: 1px 1px #2c2f34;
+  min-height: 44px;
+  max-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.members__container {
+  display: flex;
+  margin-top: 15px;
+  margin-left: 10px;
+  height: 100%;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+.members__container::-webkit-scrollbar {
+  display: none;
+}
+
+.members__container > div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.members__container > div > span {
+  color: gray;
+  font-weight: 700;
+  font-size: 14px;
+  margin-left: 10px;
+}

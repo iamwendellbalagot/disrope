@@ -17,7 +17,6 @@ import ServerIcons from '../SubComponents/ServerIcons/ServerIcons';
 const Sidebar = (props) => {
     const dispatch = useDispatch()
     const [channels, setChannels] = useState([]);
-    const [messages, setMessages] = useState([]);
     const selectedServer = useSelector(getServer);
     const selectedChannel = useSelector(getChannel);
     
@@ -43,6 +42,16 @@ const Sidebar = (props) => {
                 data: doc.data()
             })))
         })
+
+        // db.collection('server')
+        // .doc(id)
+        // .get()
+        // .then(res => {
+        //     console.log(res.data().members.forEach(userData =>{
+        //         auth.g
+        //     }));
+        // })
+
         dispatch(setChannel(null))
     }
 
@@ -70,16 +79,16 @@ const Sidebar = (props) => {
                     <div className="sidebar__header">
                         <h3>{selectedServer?.serverName}</h3>
                     </div>
-                    <div className="channel__container">
-                        <div className='channel__containerHeader'>
+                    <div className='channel__containerHeader'>
                             <div>
                                 <ExpandMoreIcon />
                                 <h5>Text Channels</h5>
                             </div>
                             <AddIcon
-                                onClick={() => props.openModal()}
+                                onClick={() => selectedServer && props.openModal()}
                              />
-                        </div>
+                    </div>
+                    <div className="channel__container">
                         {channels? channels.map(ch => (
                             <div 
                             key={ch.id} 
@@ -89,16 +98,15 @@ const Sidebar = (props) => {
                                 <h5>{ch.data.channelName}</h5>
                             </div>
                         )) : ''}
-                        
                     </div>
-                    <div className="channel__container">
-                        <div className='channel__containerHeader'>
+                    <div className='channel__containerHeader'>
                             <div>
                                 <ExpandMoreIcon />
                                 <h5>Voice Channels</h5>
                             </div>
                             <AddIcon />
-                        </div>
+                    </div>
+                    <div className="channel__container">
                         <div className="channel__containerChannels">
                             <span>#</span>
                             <h5>general</h5>

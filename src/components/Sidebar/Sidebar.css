@@ -44,13 +44,20 @@
   display: flex;
   border-bottom: 1px solid #11151a;
   box-shadow: 1px 1px #2c2f34;
-  height: 44px;
+  min-height: 44px;
+  max-height: 44px;
   padding-left: 20px;
   align-items: center;
 }
 
 .channel__container {
   margin-right: 15px;
+  height: 250px;
+  overflow-y: scroll;
+}
+
+.channel__container::-webkit-scrollbar {
+  display: none;
 }
 
 .channel__containerHeader {
