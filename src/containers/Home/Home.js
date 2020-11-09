@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {getUser, getServers} from '../../reduxSlices/userSlice';
-import {getServer} from '../../reduxSlices/appSlice';
+import {getServer, setServer} from '../../reduxSlices/appSlice';
 import firebase from 'firebase';
 import {db} from '../../firebase';
 
@@ -30,6 +30,8 @@ const Home = () => {
         if(!modalStatus){
             setJoinServer(false);
             setError(false);
+            setServerinput('');
+            setJoinServerInput('');
         }else return
     }, [modalStatus]);
 

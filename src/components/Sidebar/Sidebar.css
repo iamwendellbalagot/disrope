@@ -44,10 +44,16 @@
   display: flex;
   border-bottom: 1px solid #11151a;
   box-shadow: 1px 1px #2c2f34;
+  justify-content: space-between;
   min-height: 44px;
   max-height: 44px;
   padding-left: 20px;
   align-items: center;
+}
+
+.sidebar__header > div > .MuiSvgIcon-root {
+  margin-right: 20px;
+  cursor: pointer;
 }
 
 .channel__container {
@@ -66,13 +72,14 @@
   justify-content: space-between;
   align-items: center;
   color: gray;
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .channel__containerHeader > div {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 10px;
 }
 
 .channel__containerHeader > div > h5 {
@@ -81,6 +88,7 @@
 
 .channel__containerHeader > .MuiSvgIcon-root {
   cursor: pointer;
+  margin-right: 20px;
 }
 
 .channel__containerChannels {
@@ -110,7 +118,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 10px;
+  padding: 5px 10px;
   border-top: #11151a 2px solid;
 }
 
@@ -136,4 +144,9 @@
   margin: auto 3px !important;
   cursor: pointer;
   color: gray;
+}
+
+/* Material ui */
+#simple-menu > .MuiMenu-paper {
+  background-color: #11151a !important;
 }
