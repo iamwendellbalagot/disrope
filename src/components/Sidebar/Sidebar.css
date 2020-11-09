@@ -149,4 +149,5 @@
 /* Material ui */
 #simple-menu > .MuiMenu-paper {
   background-color: #11151a !important;
+  opacity: 0.8 !important;
 }

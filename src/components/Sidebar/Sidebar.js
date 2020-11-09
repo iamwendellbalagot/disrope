@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {logout} from '../../reduxSlices/userSlice';
 import {setServer, setChannel} from '../../reduxSlices/appSlice';
 import {getServer, getChannel} from '../../reduxSlices/appSlice';
@@ -19,6 +19,7 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import ServerIcons from '../SubComponents/ServerIcons/ServerIcons';
 
 const Sidebar = (props) => {
+    const serverRef = useRef(null);
     const dispatch = useDispatch()
     const [channels, setChannels] = useState([]);
     const [menu, setMenu] = useState(null);
@@ -40,10 +41,16 @@ const Sidebar = (props) => {
         setMenu(null);
     }
 
-    const handleServerChange =(name, id) =>{
+    const copyServerID = () => {
+        navigator.clipboard.writeText(selectedServer.serverID)
+        setMenu(null);
+    }
+
+    const handleServerChange =(name, id, serverPhoto) =>{
         dispatch(setServer({
             serverName: name,
-            serverID: id
+            serverID: id,
+            serverPhoto: serverPhoto
         }))
         db.collection('server')
         .doc(id)
@@ -85,7 +92,8 @@ const Sidebar = (props) => {
                     <ServerIcons 
                         key={server.id}
                         name={server.data.serverName}
-                        id={server.id} 
+                        id={server.id}
+                        serverPhoto = {server.data.serverPhoto} 
                         handleServerChange={handleServerChange} />
                 ))}
             </div>
@@ -103,11 +111,11 @@ const Sidebar = (props) => {
                             open={Boolean(menu)}
                             onClose={menuClose}>
                                 <MenuItem style={{color:'gray', fontSize:'15px',}} 
-                                    onClick={menuClose}>Copy Server ID</MenuItem>
+                                    onClick={copyServerID}>Copy Server ID</MenuItem>
                                 <MenuItem style={{color:'gray', fontSize:'15px'}} 
-                                    onClick={menuClose}>Edit Server</MenuItem>
-                                <MenuItem style={{color:'gray', fontSize:'15px'}} 
-                                    onClick={menuClose}>Remove Server</MenuItem>
+                                    onClick={() => props.openEditServer()}>Edit Server</MenuItem>
+                                <MenuItem style={{opacity:'0.7',color:'salmon', fontSize:'15px'}} 
+                                    onClick={menuClose}>Leave Server</MenuItem>
                             </Menu>
                         </div>
                     </div>

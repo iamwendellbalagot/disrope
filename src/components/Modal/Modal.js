@@ -11,7 +11,7 @@ const Modal = (props) => {
         setOpen(props.open)
     }, [props.open])
     return (
-        <div className={`modal ${!open && 'closed'}`} >
+        <div className={`modal isOpen ${!open && 'closed'}`} >
             <div className="modal__contents">
                 {props.children}
             </div>

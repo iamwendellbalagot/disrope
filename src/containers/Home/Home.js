@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {getUser, getServers} from '../../reduxSlices/userSlice';
 import {getServer, setServer} from '../../reduxSlices/appSlice';
 import firebase from 'firebase';
-import {db} from '../../firebase';
+import {db, auth, storage} from '../../firebase';
 
 import AppBody from '../../components/AppBody/AppBody';
 import Members from '../../components/Members/Members';
@@ -11,6 +11,9 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 import './Home.css';
 import Modal from '../../components/Modal/Modal';
 import Avatar from '@material-ui/core/Avatar';
+import { Tooltip, LinearProgress } from '@material-ui/core';
+
+const ICON = 'https://www.clipartmax.com/png/middle/307-3072095_discord-icon-by-rengatv-cool-server-icons-discord.png';
 
 const Home = () => {
     const user = useSelector(getUser);
@@ -18,10 +21,16 @@ const Home = () => {
     const selectedServer = useSelector(getServer);
 
     const [error, setError] = useState(false);
+    const [btnSaveDsbl, setBtnSaveDsbl] = useState(true); 
+    const [progressValue, setProgressValue] = useState(0);
     const [serverInput, setServerinput] = useState('');
     const [channelInput, setChannelInput] = useState('');
+    const [editServerInput,setEditServerInput] = useState('');
+    const [serverImage, setServerImage] = useState(null);
+    const [serverImageURL, setServerImageURL] = useState(selectedServer?.serverPhoto? selectedServer.serverPhoto : ICON);
     const [modalStatus, setModalStatus] = useState(false);
     const [createChannelSt, setCreateChannelSt] = useState(false);
+    const [editServer, setEditServer] = useState(false);
     const [joinServer, setJoinServer] = useState(false);
     const [joinServerInput, setJoinServerInput] = useState('');
     const [members, setMembers] = useState([]);
@@ -35,6 +44,16 @@ const Home = () => {
         }else return
     }, [modalStatus]);
 
+    useEffect(() => {
+        if(serverImage || editServerInput){
+            setBtnSaveDsbl(false)
+        }
+        if(!serverImage && !editServerInput){
+            setBtnSaveDsbl(!btnSaveDsbl)
+        }
+        
+    }, [serverImage, editServerInput])
+
     useEffect(() =>{
         console.log('Server Changed');
         selectedServer && db.collection('server')
@@ -45,7 +64,8 @@ const Home = () => {
                 id: doc.id,
                 data: doc.data()
             })))
-        })
+        });
+        setServerImageURL(selectedServer?.serverPhoto)
     },[selectedServer])
 
     //Handlers
@@ -59,6 +79,7 @@ const Home = () => {
         .add({
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             serverName: serverInput?serverInput: 'none',
+            serverPhoto: null,
             creatorUID: user.userUID,
             creatorName: user.username,
             members: [user.userUID]
@@ -108,8 +129,65 @@ const Home = () => {
     }
 
     const openModal =() =>{
-        setCreateChannelSt(!createChannelSt)
-        console.log('Create a channel');
+        setCreateChannelSt(!createChannelSt);
+    }
+
+    const openEditServer =() => {
+        setEditServer(!editServer);
+        setServerImageURL(selectedServer.serverPhoto? selectedServer.serverPhoto : ICON)
+    }
+
+    const handleServerImageChanged = (e) => {
+        setServerImageURL(URL.createObjectURL(e.target.files[0]));
+        setServerImage(e.target.files[0]);
+    }
+
+    const handleSubmitServerChanges = () => {
+        if(serverImage){
+            const uploadTask = storage.ref(`serverImages/${serverImage.name}`).put(serverImage);
+            uploadTask.on(
+                'state-changed',
+                (snapshot) => {
+                    let uploadProgress = Math.round(
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                    setProgressValue(uploadProgress);
+                },
+                (error) => {
+                    console.log(error);
+                },
+                () => {
+                    storage.ref('serverImages')
+                        .child(serverImage.name)
+                        .getDownloadURL()
+                        .then(url => {
+                        db.collection('server')
+                        .doc(selectedServer.serverID)
+                        .update({
+                            serverPhoto: url
+                        })
+                        .then(res => {
+                            setServerImageURL(selectedServer.serverPhoto);
+                            setServerImage(null);
+                            setProgressValue(0);
+                            setEditServer(!editServer)
+                        })
+                    })
+                }
+            )
+        }else{
+            db.collection('server')
+            .doc(selectedServer.serverID)
+            .update({
+                serverName: editServerInput? editServerInput : selectedServer.serverName
+            })
+            .then(res => {
+                setServerImageURL(selectedServer.serverPhoto);
+                setEditServer(!editServer)
+                setEditServerInput('');
+            })
+        }
+        
     }
 
     const handleCreateChannel = (type) =>{
@@ -141,6 +219,7 @@ const Home = () => {
                 username={user?.username}
                 handleModal={handleModal}
                 openModal = {openModal}
+                openEditServer={openEditServer}
                 userServers= {userServers} />
             <AppBody />
             <Members members={members} />
@@ -171,6 +250,7 @@ const Home = () => {
                 </div>}
                 
             </Modal>
+            {/* MODAL TO CREATE A CHANNEL */}
             <Modal open={createChannelSt}>
                 <div className="home__createChannel">
                     <p>#{channelInput? channelInput : 'Channel Name'}</p>
@@ -183,7 +263,34 @@ const Home = () => {
                     <button onClick={handleCreateChannel} >Create</button>
                 </div>
             </Modal>
-            {/* MODAL TO CREATE A CHANNEL */}
+            <Modal open={editServer} >
+                <div className="home__editServer">
+                    <h2>Edit Server ({selectedServer?.serverName})</h2>
+                    <div className='home__editServerAvatar'>   
+                        <Avatar 
+                        style={{height:'100px', width:'100px'}} 
+                        src={serverImageURL? serverImageURL: ICON}
+                        />
+                        <label><input type='file' onChange={handleServerImageChanged} />Choose</label>
+                        <LinearProgress 
+                            value={progressValue}
+                            variant='determinate' 
+                            className='home__progressbar' />
+                    </div>
+                    <div className='home__editServerForm'>
+                        <Tooltip 
+                        placement='top'
+                        title='Leave as blank if you dont want to change the server name' >
+                            <input 
+                                type='text'
+                                value={editServerInput}
+                                onChange={(e) => setEditServerInput(e.target.value)}
+                                placeholder='Server Name' />
+                        </Tooltip>
+                        <button disabled={btnSaveDsbl} onClick={handleSubmitServerChanges} >Save</button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     )
 }

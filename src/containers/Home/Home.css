@@ -90,3 +90,76 @@ eeeeee */
   font-weight: 700;
   cursor: pointer;
 }
+
+.home__editServer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.home__editServer > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home__editServer > h2 {
+  position: absolute;
+  margin-bottom: 180px;
+}
+
+.home__editServerForm > input {
+  outline: none;
+  margin: 10px;
+  width: 200px;
+  padding: 5px;
+  background-color: #232931;
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.home__editServerForm > button {
+  background-color: #4ecca3;
+  padding: 5px;
+  width: 213px;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  color: #232931;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.home__editServerForm > button:disabled {
+  background-color: gray;
+  color: white;
+  cursor: default;
+}
+
+.home__editServerAvatar > label > input {
+  display: none;
+}
+
+.home__editServerAvatar > label {
+  font-weight: 700;
+  font-size: 15px;
+  color: gray;
+  position: absolute;
+  margin-top: 130px;
+  cursor: pointer;
+  transition: all 200ms;
+}
+
+.home__editServerAvatar > label:hover {
+  color: white;
+}
+
+/* MATERIAL UI */
+
+.home__progressbar {
+  width: 100%;
+  margin: 5px;
+}

@@ -3,7 +3,6 @@
   position: absolute;
   height: 100vh;
   width: 100%;
-  transition: all 300ms;
 }
 
 .modal__backdrop {
@@ -14,7 +13,7 @@
 }
 
 .modal__contents {
-  z-index: 1;
+  z-index: 500;
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -32,5 +31,12 @@
 }
 
 .closed {
-  display: none !important;
+  transition: all 200ms;
+  transition-timing-function: ease-in-out;
+  transform: translateY(-100%);
+}
+
+.isOpen {
+  transition: all 200ms;
+  transition-timing-function: ease-in-out;
 }
