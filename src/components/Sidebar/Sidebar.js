@@ -3,6 +3,7 @@ import {logout} from '../../reduxSlices/userSlice';
 import {setServer, setChannel} from '../../reduxSlices/appSlice';
 import {getServer, getChannel} from '../../reduxSlices/appSlice';
 import {useDispatch, useSelector} from 'react-redux';
+import firebase from 'firebase';
 import {auth, db} from '../../firebase';
 import './Sidebar.css';
 
@@ -65,17 +66,35 @@ const Sidebar = (props) => {
                 data: doc.data()
             })))
         })
-
-        // db.collection('server')
-        // .doc(id)
-        // .get()
-        // .then(res => {
-        //     console.log(res.data().members.forEach(userData =>{
-        //         auth.g
-        //     }));
-        // })
-
         dispatch(setChannel(null))
+    }
+
+    const handleLeaveServer = () =>{
+        console.log('Leaving the server')
+        const membersRef = db.collection('server')
+            .doc(selectedServer.serverID)
+            .collection('serverMembers');
+        membersRef
+        .where('userUID', '==', props.uid)
+        .get()
+        .then(res => {
+            res.docs.forEach(doc =>{
+                membersRef.doc(doc.id).delete()
+                .then(_res => console.log('User removed'));
+                db.collection('server')
+                .doc(selectedServer.serverID)
+                .update({
+                    members: firebase.firestore.FieldValue.arrayRemove(props.uid)
+                })
+                .then(__res =>{
+                    setMenu(null);
+                    setChannels([]);
+                    dispatch(setServer(null));
+                    dispatch(setChannel(null));
+                    props.setMembersNull();
+                })
+            })
+        })
     }
 
     const handleChannelChange = (name, id) => {
@@ -118,7 +137,7 @@ const Sidebar = (props) => {
                                 <MenuItem style={{color:'gray', fontSize:'15px'}} 
                                     onClick={() => props.openEditServer()}>Edit Server</MenuItem>
                                 <MenuItem style={{opacity:'0.7',color:'salmon', fontSize:'15px'}} 
-                                    onClick={menuClose}>Leave Server</MenuItem>
+                                    onClick={handleLeaveServer}>Leave Server</MenuItem>
                             </Menu>
                         </div>
                     </div>

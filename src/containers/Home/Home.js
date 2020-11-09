@@ -66,7 +66,8 @@ const Home = () => {
                 data: doc.data()
             })))
         });
-        setServerImageURL(selectedServer?.serverPhoto)
+        setServerImageURL(selectedServer?.serverPhoto);
+        
     },[selectedServer])
 
     //Handlers
@@ -123,6 +124,10 @@ const Home = () => {
             });
         })
         .catch(err => setError(true));
+    }
+
+    const setMembersNull = () =>{
+        setMembers([]);
     }
 
     const openJoinServerModal =() => {
@@ -225,7 +230,8 @@ const Home = () => {
                 handleModal={handleModal}
                 openModal = {openModal}
                 openEditServer={openEditServer}
-                userServers= {userServers} />
+                userServers= {userServers}
+                setMembersNull ={setMembersNull} />
             <AppBody />
             <Members members={members} />
             {/* MODAL TO CREATE A SERVER */}

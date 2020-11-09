@@ -16,9 +16,6 @@ const Credentials = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(email, username);
-        console.log(password, confPassword)
-        
         if(password !== confPassword) {
             setError('auth/pass-not-matched')
             return
@@ -31,7 +28,6 @@ const Credentials = () => {
                     displayName: username
                 })
                 .then(_res =>{
-                    console.log('Registered:', res.user);
                     dispatch(login({
                         userUID: res.user.uid,
                         userPhoto: res.user.photoURL,
@@ -43,11 +39,9 @@ const Credentials = () => {
                 })
             })  
             .catch(err => {
-                console.log(err.code);
                 setError(err.code)
             });
         }
-        
     }
     return (
         <div className='credentials'>
