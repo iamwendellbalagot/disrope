@@ -3,18 +3,51 @@ import { Link} from 'react-router-dom';
 import {auth} from '../../firebase';
 import './Credentials.css';
 
+import {useDispatch} from 'react-redux';
+import {login} from '../../reduxSlices/userSlice';
+
 const Credentials = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confPassword, setConfPassword] = useState('');
+    const [error, setError] = useState('');
+    const dispatch = useDispatch();
 
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(email, username);
         console.log(password, confPassword)
-        // setEmail('');
-        // setPassword('');
+        
+        if(password !== confPassword) {
+            setError('auth/pass-not-matched')
+            return
+        }
+
+        if(email && username && password && confPassword){
+            auth.createUserWithEmailAndPassword(email, password)
+            .then(res => {
+                res.user.updateProfile({
+                    displayName: username
+                })
+                .then(_res =>{
+                    console.log('Registered:', res.user);
+                    dispatch(login({
+                        userUID: res.user.uid,
+                        userPhoto: res.user.photoURL,
+                        username: res.user.displayName
+                    }));
+                    setEmail('');
+                    setPassword('');
+                    return
+                })
+            })  
+            .catch(err => {
+                console.log(err.code);
+                setError(err.code)
+            });
+        }
+        
     }
     return (
         <div className='credentials'>
@@ -29,6 +62,7 @@ const Credentials = () => {
                         <label>Email:</label>
                         <input 
                             type="email"
+                            className ={error==='auth/email-already-in-use'? 'error': ''}
                             value={email? email: ''} 
                             onChange={(e)=>setEmail(e.target.value)}
                             placeholder='Type your email'/>
@@ -44,7 +78,8 @@ const Credentials = () => {
                     <div>
                         <label>Password:</label>
                         <input 
-                            type="password" 
+                            type="password"
+                            className={error==='auth/pass-not-matched'? 'error': ''} 
                             value={password? password: ''}
                             onChange={(e)=> setPassword(e.target.value)}
                             placeholder='Password'/>
@@ -53,6 +88,7 @@ const Credentials = () => {
                         <label>Confirm Password:</label>
                         <input 
                             type="password" 
+                            className={error==='auth/pass-not-matched'? 'error' : ''} 
                             value={confPassword}
                             onChange={(e)=> setConfPassword(e.target.value)}
                             placeholder='Confirm Password'/>

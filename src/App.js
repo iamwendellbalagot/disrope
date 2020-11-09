@@ -29,7 +29,6 @@ function App() {
   }, [dispatch])
 
   useEffect(() => {
-    console.log(user);
     if(user){
       db.collection('server')
       .where('members', 'array-contains', user?.userUID)
