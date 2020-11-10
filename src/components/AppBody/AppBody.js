@@ -64,6 +64,7 @@ const AppBody = () => {
                             userPhoto={message.data.userPhoto}
                             dateSent = {message.data.timestamp}
                             isUser = {message.data.userUID === user.userUID}
+                            type={message.data.type}
                             />
                     ))}
                 </FlipMove>

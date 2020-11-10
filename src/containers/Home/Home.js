@@ -186,6 +186,10 @@ const Home = () => {
 
     const handleSubmitServerChanges = () => {
         if(serverImage){
+            let inputServerName = selectedServer.serverName;
+            if(editServerInput){
+                inputServerName = editServerInput;
+            }
             const uploadTask = storage.ref(`serverImages/${serverImage.name}`).put(serverImage);
             uploadTask.on(
                 'state-changed',
@@ -206,18 +210,25 @@ const Home = () => {
                         db.collection('server')
                         .doc(selectedServer.serverID)
                         .update({
-                            serverPhoto: url
+                            serverPhoto: url,
+                            serverName: inputServerName
                         })
                         .then(res => {
                             setServerImageURL(selectedServer.serverPhoto);
                             setServerImage(null);
+                            dispatch(setServer({
+                                serverName: inputServerName,
+                                serverID: selectedServer.serverID,
+                                serverPhoto: url
+                            }))
                             setProgressValue(0);
                             setEditServer(!editServer)
                         })
                     })
                 }
             )
-        }else{
+        }
+        if(!serverImage && editServerInput){
             db.collection('server')
             .doc(selectedServer.serverID)
             .update({

@@ -69,6 +69,11 @@ const Sidebar = (props) => {
         dispatch(setChannel(null))
     }
 
+    const handleOpenEditServer = () => {
+        props.openEditServer();
+        setMenu(null);
+    }
+
     const handleLeaveServer = () =>{
         console.log('Leaving the server')
         const membersRef = db.collection('server')
@@ -135,7 +140,7 @@ const Sidebar = (props) => {
                                 <MenuItem style={{color:'gray', fontSize:'15px',}} 
                                     onClick={copyServerID}>Copy Server ID</MenuItem>
                                 <MenuItem style={{color:'gray', fontSize:'15px'}} 
-                                    onClick={() => props.openEditServer()}>Edit Server</MenuItem>
+                                    onClick={handleOpenEditServer}>Edit Server</MenuItem>
                                 <MenuItem style={{opacity:'0.7',color:'salmon', fontSize:'15px'}} 
                                     onClick={handleLeaveServer}>Leave Server</MenuItem>
                             </Menu>
