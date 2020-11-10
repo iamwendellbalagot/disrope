@@ -115,6 +115,20 @@ const Input = () => {
         setMessage(message + e.native)
         setEmojiPicker(false);
     }
+
+    const handleGifPicker = () =>{
+        if(selectedChannel && selectedServer){
+            setGifPicker(!openGifPicker); 
+            setEmojiPicker(false);
+        }
+    }
+
+    const handleEmojiPicker = () => {
+        if(selectedServer && selectedChannel){
+            setEmojiPicker(!openEmojiPicker); 
+            setGifPicker(false);
+        }
+    }
     
 
     return (
@@ -133,12 +147,12 @@ const Input = () => {
                     type='text' 
                     placeholder='Message #test-channel' />
                 <button type='submit'>Send</button>
-                <GifIcon onClick={() => {setGifPicker(!openGifPicker); setEmojiPicker(false)}} />
-                <EmojiEmotionsIcon onClick={() => {setEmojiPicker(!openEmojiPicker); setGifPicker(false)}} />
+                <GifIcon onClick={handleGifPicker} />
+                <EmojiEmotionsIcon onClick={handleEmojiPicker} />
                 {openEmojiPicker?<Picker onSelect={addEmoji}
                     style={{position:'absolute', right: '200px', bottom:'70px'}} />: null}
             </form>
-            {openGifPicker?<div style={{position:'absolute', bottom:'70px', right: '200px'}}>
+            {openGifPicker && selectedChannel?<div style={{position:'absolute', bottom:'70px', right: '200px'}}>
                 <ReactGiphySearchbox 
                     apiKey='6APF3O8G66WwXMy6iNOh22fhpsWJqLtc'
                     onSelect={addGif} />

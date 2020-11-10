@@ -6,18 +6,26 @@ import './Credentials.css';
 const Credentials = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
         auth.signInWithEmailAndPassword(email, password)
-        .catch(err => alert(err.message))
-        setEmail('');
-        setPassword('');
+        .then(res => {
+            setEmail('');
+            setPassword('');
+        })
+        .catch(err => {
+            setError(err.code)
+        })
+        
     }
 
     const googleSignIn = () =>{
         auth.signInWithPopup(googleProvider)
-        .catch(err => alert(err.message))
+        .catch(err => {
+            setError(err.code)
+        })
     }
 
     return (
@@ -31,6 +39,7 @@ const Credentials = () => {
                         <label>Email:</label>
                         <input 
                             type="email"
+                            className={error==='auth/user-not-found'? 'error': ''}
                             value={email? email: ''} 
                             onChange={(e)=>setEmail(e.target.value)}
                             placeholder='Type your email'/>
@@ -39,6 +48,7 @@ const Credentials = () => {
                         <label>Password:</label>
                         <input 
                             type="password" 
+                            className={error==='auth/wrong-password'? 'error': ''}
                             value={password? password: ''}
                             onChange={(e)=> setPassword(e.target.value)}
                             placeholder='Password'/>
