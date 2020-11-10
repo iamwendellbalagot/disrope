@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {getUser, getServers} from '../../reduxSlices/userSlice';
+import {getUser, getServers, login} from '../../reduxSlices/userSlice';
 import {getServer, setServer} from '../../reduxSlices/appSlice';
 import firebase from 'firebase';
 import {db, auth, storage} from '../../firebase';
@@ -27,11 +27,17 @@ const Home = () => {
     const [serverInput, setServerinput] = useState('');
     const [channelInput, setChannelInput] = useState('');
     const [editServerInput,setEditServerInput] = useState('');
+    const [editUserInput, setEditUserInput] = useState('');
     const [serverImage, setServerImage] = useState(null);
     const [serverImageURL, setServerImageURL] = useState(selectedServer?.serverPhoto? selectedServer.serverPhoto : ICON);
+    const [userImage, setUserImage] = useState(null);
+    const [userImageURL, setUserImageURL] = useState(user?.userPhoto? user.userPhoto : '');
+
+    
     const [modalStatus, setModalStatus] = useState(false);
     const [createChannelSt, setCreateChannelSt] = useState(false);
     const [editServer, setEditServer] = useState(false);
+    const [editProfile, setEditProfile] = useState(false);
     const [joinServer, setJoinServer] = useState(false);
     const [joinServerInput, setJoinServerInput] = useState('');
     const [members, setMembers] = useState([]);
@@ -46,6 +52,12 @@ const Home = () => {
     }, [modalStatus]);
 
     useEffect(() => {
+        setEditUserInput('');
+        setUserImageURL(user.userPhoto? user.userPhoto : null)
+        setUserImage(null);
+    }, [editProfile])
+
+    useEffect(() => {
         if(serverImage || editServerInput){
             setBtnSaveDsbl(false)
         }
@@ -55,8 +67,17 @@ const Home = () => {
         
     }, [serverImage, editServerInput])
 
+    useEffect(() => {
+        if(userImage || editUserInput){
+            setBtnSaveDsbl(false)
+        }
+        if(!userImage && !editUserInput){
+            setBtnSaveDsbl(!btnSaveDsbl)
+        }
+        
+    }, [userImage, editUserInput])
+
     useEffect(() =>{
-        console.log('Server Changed');
         selectedServer && db.collection('server')
         .doc(selectedServer.serverID)
         .collection('serverMembers')
@@ -67,7 +88,6 @@ const Home = () => {
             })))
         });
         setServerImageURL(selectedServer?.serverPhoto);
-        
     },[selectedServer])
 
     //Handlers
@@ -143,9 +163,17 @@ const Home = () => {
         setServerImageURL(selectedServer.serverPhoto? selectedServer.serverPhoto : ICON)
     }
 
+    const openEditProfile = () => {
+        setEditProfile(!editProfile);
+    };
+
     const handleServerImageChanged = (e) => {
         setServerImageURL(URL.createObjectURL(e.target.files[0]));
         setServerImage(e.target.files[0]);
+    }
+    const handleUserImageChanged = (e) => {
+        setUserImageURL(URL.createObjectURL(e.target.files[0]));
+        setUserImage(e.target.files[0]);
     }
 
     const handleSubmitServerChanges = () => {
@@ -200,6 +228,59 @@ const Home = () => {
         
     }
 
+    const handleSubmitUserChanges = () =>{
+        console.log(userImage)
+        console.log(editUserInput);
+        if(userImage){
+            const uploadTask = storage.ref(`profilePictures/${userImage.name}`).put(userImage)
+            let inputUsername = editUserInput;
+            if(!editUserInput){
+                inputUsername = user.username;
+            };
+            uploadTask.on(
+                'state-changed',
+                (snapshot) => {
+                    const uploadProgress = Math.round(
+                        (snapshot.bytesTransferred/snapshot.totalBytes) * 100
+                    )
+                    setProgressValue(uploadProgress);
+                },
+                (error) => {
+                    console.log(error.message)
+                },
+                () => {
+                    storage.ref('profilePictures')
+                    .child(userImage.name)
+                    .getDownloadURL()
+                    .then(url => {
+                        auth.onAuthStateChanged(userAuth =>{
+                            userAuth.updateProfile({
+                                displayName: inputUsername,
+                                photoURL: url
+                            })
+                            .then(res => {
+                                dispatch(login({
+                                    userUID: user.userUID,
+                                    userPhoto: url,
+                                    username: inputUsername
+                                }))
+                                setProgressValue(0);
+                                setEditProfile(!editProfile);
+                            })
+                        })
+                    })
+                }
+            )
+        };
+        if(!userImage && editUserInput) {
+            auth.onAuthStateChanged(userAuth =>{
+                userAuth.updateProfile({
+                    displayName: editUserInput
+                })
+            })
+        }
+    }
+
     const handleCreateChannel = (type) =>{
         console.log(selectedServer.serverID);
         db.collection('server')
@@ -230,6 +311,7 @@ const Home = () => {
                 handleModal={handleModal}
                 openModal = {openModal}
                 openEditServer={openEditServer}
+                openEditProfile = {openEditProfile}
                 userServers= {userServers}
                 setMembersNull ={setMembersNull} />
             <AppBody />
@@ -274,6 +356,7 @@ const Home = () => {
                     <button onClick={handleCreateChannel} >Create</button>
                 </div>
             </Modal>
+            {/* MODAL EDIT SEVER */}
             <Modal open={editServer} >
                 <div className="home__editServer">
                     <h2>Edit Server ({selectedServer?.serverName})</h2>
@@ -299,6 +382,35 @@ const Home = () => {
                                 placeholder='Server Name' />
                         </Tooltip>
                         <button disabled={btnSaveDsbl} onClick={handleSubmitServerChanges} >Save</button>
+                    </div>
+                </div>
+            </Modal>
+            {/* MODAL EDIT PROFILE */}
+            <Modal open={editProfile} >
+                <div className="home__editServer">
+                    <h2>Edit your Profile</h2>
+                    <div className='home__editServerAvatar'>   
+                        <Avatar 
+                        style={{height:'100px', width:'100px'}} 
+                        src={userImage? URL.createObjectURL(userImage): userImageURL }
+                        />
+                        <label><input type='file' onChange={handleUserImageChanged} />Choose</label>
+                        <LinearProgress 
+                            value={progressValue}
+                            variant='determinate' 
+                            className='home__progressbar' />
+                    </div>
+                    <div className='home__editServerForm'>
+                        <Tooltip 
+                        placement='top'
+                        title='Leave as blank if you dont want to change your username' >
+                            <input 
+                                type='text'
+                                value={editUserInput}
+                                onChange={(e) => setEditUserInput(e.target.value)}
+                                placeholder='Username' />
+                        </Tooltip>
+                        <button disabled={btnSaveDsbl} onClick={handleSubmitUserChanges} >Save</button>
                     </div>
                 </div>
             </Modal>

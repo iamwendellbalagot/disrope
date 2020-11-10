@@ -186,6 +186,7 @@ const Sidebar = (props) => {
                             <Avatar
                                 style={{cursor: 'pointer'}}
                                 src={props.userPhoto}
+                                onClick={() => props.openEditProfile()}
                             />
                         </Tooltip>
                         <div>
