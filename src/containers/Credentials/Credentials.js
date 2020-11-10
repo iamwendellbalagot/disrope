@@ -9,8 +9,6 @@ const Credentials = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(email);
-        console.log(password);
         auth.signInWithEmailAndPassword(email, password)
         .catch(err => alert(err.message))
         setEmail('');

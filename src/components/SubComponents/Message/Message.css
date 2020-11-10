@@ -4,7 +4,6 @@
   display: flex;
   margin: 10px 0;
   border-bottom: 1px solid rgba(128, 128, 128, 0.1);
-  border-opacity: 0.1;
 }
 
 .message__info {
@@ -35,6 +34,11 @@
   font-size: 14px;
   opacity: 0.8;
   margin-bottom: 10px;
+}
+
+.message__info > p > img {
+  object-fit: contain;
+  max-height: 300px;
 }
 
 .isUser {

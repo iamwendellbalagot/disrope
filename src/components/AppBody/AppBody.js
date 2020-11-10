@@ -42,6 +42,7 @@ const AppBody = () => {
         setMessages([]);
     },[selectedServer]);
 
+
     return (
         <div className='appbody'>
             <div className="appbody__header">
@@ -64,8 +65,9 @@ const AppBody = () => {
                             userPhoto={message.data.userPhoto}
                             dateSent = {message.data.timestamp}
                             isUser = {message.data.userUID === user.userUID}
-                            type={message.data.type}
+                            messageType={message.data.type}
                             />
+                        
                     ))}
                 </FlipMove>
             </div>
