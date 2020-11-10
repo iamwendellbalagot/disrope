@@ -42,6 +42,14 @@ const Home = () => {
     const [joinServerInput, setJoinServerInput] = useState('');
     const [members, setMembers] = useState([]);
 
+    // useEffect(() => {
+    //     if(user){
+    //         userServers.forEach(us => {
+    //             console.log(us.id)
+    //         })
+    //     }
+    // }, [user])
+
     useEffect(() => {
         if(!modalStatus){
             setJoinServer(false);
@@ -229,8 +237,6 @@ const Home = () => {
     }
 
     const handleSubmitUserChanges = () =>{
-        console.log(userImage)
-        console.log(editUserInput);
         if(userImage){
             const uploadTask = storage.ref(`profilePictures/${userImage.name}`).put(userImage)
             let inputUsername = editUserInput;
@@ -259,6 +265,55 @@ const Home = () => {
                                 photoURL: url
                             })
                             .then(res => {
+                                userServers.forEach(usSe => {
+                                    db.collection('server')
+                                    .doc(usSe.id)
+                                    .collection('serverMembers')
+                                    .where('userUID', '==', user.userUID)
+                                    .get()
+                                    .then(_res => {
+                                        _res.docs.forEach(doc =>{
+                                            if(doc.data().userUID === user.userUID){
+                                                db.collection('server')
+                                                .doc(usSe.id)
+                                                .collection('serverMembers')
+                                                .doc(doc.id)
+                                                .update({
+                                                    userPhoto: url,
+                                                    username: inputUsername
+                                                })
+                                            }
+                                        })
+                                    })
+                                })
+
+                                userServers.forEach(usSe => {
+                                    let serverRef = db.collection('server')
+                                        .doc(usSe.id)
+                                        .collection('textChannel');
+                                    serverRef
+                                    .get()
+                                    .then(_res => {
+                                        _res.docs.forEach(doc => {
+                                            serverRef.doc(doc.id)
+                                            .collection('messages')
+                                            .get().then(__res =>{
+                                                __res.docs.forEach(memberMes =>{
+                                                    if(memberMes.data().userUID === user.userUID){
+                                                        serverRef.doc(doc.id)
+                                                        .collection('messages')
+                                                        .doc(memberMes.id)
+                                                        .update({
+                                                            user: inputUsername,
+                                                            userPhoto: url
+                                                        })
+                                                    }
+                                                })
+                                            })
+                                        })
+                                    })
+                                })
+
                                 dispatch(login({
                                     userUID: user.userUID,
                                     userPhoto: url,
@@ -277,12 +332,66 @@ const Home = () => {
                 userAuth.updateProfile({
                     displayName: editUserInput
                 })
+                .then( res =>{
+                    userServers.forEach(usSe => {
+                        db.collection('server')
+                        .doc(usSe.id)
+                        .collection('serverMembers')
+                        .where('userUID', '==', user.userUID)
+                        .get()
+                        .then(_res => {
+                            _res.docs.forEach(doc =>{
+                                if(doc.data().userUID === user.userUID){
+                                    db.collection('server')
+                                    .doc(usSe.id)
+                                    .collection('serverMembers')
+                                    .doc(doc.id)
+                                    .update({
+                                        username: editUserInput
+                                    })
+                                }
+                            })
+                        })
+                    })
+
+                    userServers.forEach(usSe => {
+                        let serverRef = db.collection('server')
+                            .doc(usSe.id)
+                            .collection('textChannel');
+                        serverRef
+                        .get()
+                        .then(_res => {
+                            _res.docs.forEach(doc => {
+                                serverRef.doc(doc.id)
+                                .collection('messages')
+                                .get().then(__res =>{
+                                    __res.docs.forEach(memberMes =>{
+                                        if(memberMes.data().userUID === user.userUID){
+                                            serverRef.doc(doc.id)
+                                            .collection('messages')
+                                            .doc(memberMes.id)
+                                            .update({
+                                                user: editUserInput
+                                            })
+                                        }
+                                    })
+                                })
+                            })
+                        })
+                    })
+
+                    dispatch(login({
+                        userUID: user.userUID,
+                        userPhoto: user.userPhoto,
+                        username: editUserInput
+                    }))
+                    setEditProfile(!editProfile);
+                })
             })
         }
     }
 
     const handleCreateChannel = (type) =>{
-        console.log(selectedServer.serverID);
         db.collection('server')
         .doc(selectedServer.serverID)
         .collection('textChannel')
