@@ -30,7 +30,7 @@ const Credentials = () => {
 
     return (
         <div className='credentials'>
-            <img src='https://upload.wikimedia.org/wikipedia/sco/thumb/9/98/Discord_logo.svg/1200px-Discord_logo.svg.png'
+            <img src='Logo.png'
                  alt='Logo' />
                 <form className="credentials__form" onSubmit={handleSubmit}>
                     <h2>Welcome back!</h2>
