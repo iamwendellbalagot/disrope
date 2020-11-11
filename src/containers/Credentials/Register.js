@@ -47,7 +47,7 @@ const Credentials = () => {
         <div className='credentials'>
             <img
                 className='credentials__image' 
-                src='https://upload.wikimedia.org/wikipedia/sco/thumb/9/98/Discord_logo.svg/1200px-Discord_logo.svg.png'
+                src='Logo.png'
                  alt='Logo' />
                 <form className="credentials__form credentials__register" onSubmit={handleSubmit}>
                     <h2>Hello user!</h2>
