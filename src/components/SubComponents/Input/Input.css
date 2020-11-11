@@ -46,3 +46,17 @@
 .input__form > .MuiSvgIcon-root:hover {
   transform: scale(1.08);
 }
+
+@media (max-width: 415px) {
+  .input > div {
+    margin: auto !important;
+    left: 15% !important;
+    bottom: 100px !important;
+  }
+
+  .input > form > div {
+    margin: auto !important;
+    left: 7% !important;
+    bottom: 100px !important;
+  }
+}

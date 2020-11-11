@@ -13,13 +13,16 @@ import Input from '../SubComponents/Input/Input';
 
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import Message from '../SubComponents/Message/Message';
 
-const AppBody = () => {
+const AppBody = ({handleDrawer}) => {
     const [messages, setMessages] = useState([]);
     const user = useSelector(getUser);
     const selectedChannel = useSelector(getChannel);
     const selectedServer = useSelector(getServer);
+    const [drawer, setDrawer] = useState(false);
 
     useEffect(() => {
         if(selectedChannel && selectedChannel.channelID){
@@ -45,6 +48,8 @@ const AppBody = () => {
 
     return (
         <div className='appbody'>
+            {!drawer?<ArrowRightIcon onClick={() => {setDrawer(true); handleDrawer(true)}} />
+            : <ArrowLeftIcon onClick={() => {setDrawer(false); handleDrawer(false)}} />}
             <div className="appbody__header">
                 <div className="appbody__headerChannel">
                     <span>#</span>

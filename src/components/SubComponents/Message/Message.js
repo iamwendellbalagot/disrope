@@ -31,6 +31,7 @@ const Message = forwardRef(({username, message, dateSent, userPhoto, isUser, mes
                         width={message.width}
                         title={message.title}
                         frameBorder='0'
+                        className='message__info__iframe'
                     /></p>: ''}
                 {messageType==='image'? 
                 <p><img src={message} alt='Loading...' /></p>

@@ -22,6 +22,7 @@ const Home = () => {
     const selectedServer = useSelector(getServer);
 
     const [error, setError] = useState(false);
+    const [drawer, setDrawer] = useState(false);
     const [btnSaveDsbl, setBtnSaveDsbl] = useState(true); 
     const [progressValue, setProgressValue] = useState(0);
     const [serverInput, setServerinput] = useState('');
@@ -103,6 +104,10 @@ const Home = () => {
     const handleModal = () => {
         setModalStatus(!modalStatus);
     }
+
+    const handleDrawer = (state) => {
+        setDrawer(state)
+    };
 
     const handleCreateServer = () =>{
         db.collection('server')
@@ -424,7 +429,8 @@ const Home = () => {
 
     return (
         <div className='home'>
-            <Sidebar 
+            <Sidebar
+                isDrawer={drawer}
                 uid={user?.userUID}
                 userPhoto={user?.userPhoto}
                 username={user?.username}
@@ -434,7 +440,7 @@ const Home = () => {
                 openEditProfile = {openEditProfile}
                 userServers= {userServers}
                 setMembersNull ={setMembersNull} />
-            <AppBody />
+            <AppBody handleDrawer = {handleDrawer}  />
             <Members members={members} />
             {/* MODAL TO CREATE A SERVER */}
             <Modal open={modalStatus} >

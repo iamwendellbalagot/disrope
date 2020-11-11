@@ -3,6 +3,7 @@
   position: absolute;
   height: 100vh;
   width: 100%;
+  overflow: hidden;
 }
 
 .modal__backdrop {
@@ -39,4 +40,20 @@
 .isOpen {
   transition: all 200ms;
   transition-timing-function: ease-in-out;
+}
+
+@media (min-height: 1024px) {
+  .modal__contents {
+    margin-top: 300px;
+  }
+}
+
+@media (max-width: 415px) {
+  .modal__contents {
+    max-width: 320px;
+    max-height: 250px;
+    min-width: 200px;
+    min-height: 150px;
+    margin-top: 200px;
+  }
 }

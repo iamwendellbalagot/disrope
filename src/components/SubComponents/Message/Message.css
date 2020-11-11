@@ -44,3 +44,14 @@
 .isUser {
   color: #7289da !important;
 }
+
+@media (max-width: 415px) {
+  .members {
+    display: none;
+  }
+
+  .message__info__iframe {
+    max-height: 200px;
+    max-width: 250px;
+  }
+}

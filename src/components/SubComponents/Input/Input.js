@@ -149,8 +149,12 @@ const Input = () => {
                 <button type='submit'>Send</button>
                 <GifIcon onClick={handleGifPicker} />
                 <EmojiEmotionsIcon onClick={handleEmojiPicker} />
-                {openEmojiPicker?<Picker onSelect={addEmoji}
-                    style={{position:'absolute', right: '200px', bottom:'70px'}} />: null}
+                {openEmojiPicker?
+                <div style={{position:'absolute', right: '200px', bottom:'70px'}}>
+                    <Picker onSelect={addEmoji} />
+                </div>: null}
+                
+                    
             </form>
             {openGifPicker && selectedChannel?<div style={{position:'absolute', bottom:'70px', right: '200px'}}>
                 <ReactGiphySearchbox 

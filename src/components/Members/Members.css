@@ -38,3 +38,9 @@
   font-size: 14px;
   margin-left: 10px;
 }
+
+@media (max-width: 415px) {
+  .members {
+    display: none;
+  }
+}

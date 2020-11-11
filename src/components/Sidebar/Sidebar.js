@@ -110,7 +110,7 @@ const Sidebar = (props) => {
     }
 
     return (
-        <div className='sidebar'>
+        <div className={props.isDrawer? 'sidebar activate__sidebar': 'sidebar'}>
             <div className="sidebar__server">
                 <Tooltip title='Add Server' placement='right' >
                     <AddBoxIcon onClick={props.handleModal} />
