@@ -41,9 +41,7 @@ function App() {
         ))
       })
     }
-    
   }, [user, dispatch])
-
 
   return (
     <div className="app">
