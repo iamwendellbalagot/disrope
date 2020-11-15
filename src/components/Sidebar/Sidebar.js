@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {logout} from '../../reduxSlices/userSlice';
 import {setServer, setChannel} from '../../reduxSlices/appSlice';
-import {getServer, getChannel} from '../../reduxSlices/appSlice';
+import {getServer, getChannel, getChannels} from '../../reduxSlices/appSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import firebase from 'firebase';
 import {auth, db} from '../../firebase';
@@ -9,7 +9,6 @@ import './Sidebar.css';
 
 import Tooltip from '@material-ui/core/Tooltip';
 import Menu from '@material-ui/core/Menu';
-import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
@@ -19,13 +18,23 @@ import Avatar from '@material-ui/core/Avatar';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import ServerIcons from '../SubComponents/ServerIcons/ServerIcons';
 
+const DEF_ID = 'cbnoGl5qk54qID8I4QFt';
+
 const Sidebar = (props) => {
     const serverRef = useRef(null);
     const dispatch = useDispatch()
-    const [channels, setChannels] = useState([]);
-    const [menu, setMenu] = useState(null);
     const selectedServer = useSelector(getServer);
     const selectedChannel = useSelector(getChannel);
+    const defaultChannels = useSelector(getChannels);
+
+    const [channels, setChannels] = useState(defaultChannels);
+    const [menu, setMenu] = useState(null);
+    
+    useEffect(() => {
+        if(defaultChannels){
+            setChannels(defaultChannels)
+        }
+    }, [defaultChannels])
     
 
     const signOutUser = () =>{
@@ -130,7 +139,7 @@ const Sidebar = (props) => {
                         <h3>{selectedServer?.serverName}</h3>
                         {/* <ExpandMoreIcon onClick={menuOpen} aria-controls='server-menu' aria-haspopup='true' /> */}
                         <div >
-                            {selectedServer?<ExpandMoreIcon aria-controls="simple-menu" aria-haspopup="true" onClick={menuOpen} />: null}
+                            {selectedServer && selectedServer.serverID !== DEF_ID ?<ExpandMoreIcon aria-controls="simple-menu" aria-haspopup="true" onClick={menuOpen} />: null}
                             <Menu
                             id="simple-menu"
                             anchorEl={menu}
@@ -172,7 +181,9 @@ const Sidebar = (props) => {
                             <div>
                                 <h5>Voice Channels</h5>
                             </div>
-                            <AddIcon />
+                            <Tooltip title='Not Available' >
+                                <AddIcon />
+                            </Tooltip>
                     </div>
                     <div className="channel__container">
                         <div className="channel__containerChannels">

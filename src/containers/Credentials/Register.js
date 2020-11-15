@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Link} from 'react-router-dom';
-import {auth} from '../../firebase';
+import firebase from 'firebase';
+import {auth, db} from '../../firebase';
 import './Credentials.css';
 
 import {useDispatch} from 'react-redux';
@@ -28,14 +29,32 @@ const Credentials = () => {
                     displayName: username
                 })
                 .then(_res =>{
-                    dispatch(login({
-                        userUID: res.user.uid,
-                        userPhoto: res.user.photoURL,
-                        username: res.user.displayName
-                    }));
-                    setEmail('');
-                    setPassword('');
-                    return
+                    db.collection('server')
+                    .doc('cbnoGl5qk54qID8I4QFt')
+                    .update({
+                        members: firebase.firestore.FieldValue.arrayUnion(res.user.uid)
+                    })
+                    .then(__res => {
+                        db.collection('server')
+                        .doc('cbnoGl5qk54qID8I4QFt')
+                        .collection('serverMembers')
+                        .add({
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            userPhoto: res.user.photoURL,
+                            userUID: res.user.uid,
+                            username: res.user.displayName
+                        })
+                        .then(___res =>{
+                            dispatch(login({
+                                userUID: res.user.uid,
+                                userPhoto: res.user.photoURL,
+                                username: res.user.displayName
+                            }));
+                            setEmail('');
+                            setPassword('');
+                            return
+                        })
+                    })
                 })
             })  
             .catch(err => {

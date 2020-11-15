@@ -1,7 +1,7 @@
 .appbody {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 0.8;
   background-color: #393e46;
 }
 
@@ -64,5 +64,11 @@
 @media (max-width: 768px) {
   .appbody > .MuiSvgIcon-root {
     display: inherit;
+  }
+}
+
+@media (max-width: 415px) {
+  .appbody {
+    flex: 1;
   }
 }

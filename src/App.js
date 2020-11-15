@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {auth, db} from './firebase';
+import {setServer, setChannel, setChannels} from './reduxSlices/appSlice';
 import {login, logout, getUser, servers, getServers} from './reduxSlices/userSlice';
 import './App.css';
 import Credentials from './containers/Credentials/Credentials';
@@ -21,6 +22,23 @@ function App() {
           userPhoto: authUser.photoURL,
           username: authUser.displayName
         }));
+
+        dispatch(setServer({
+          serverName: 'disrope',
+          serverID: 'cbnoGl5qk54qID8I4QFt',
+          serverPhoto: null
+        }))
+
+        db.collection('server')
+        .doc('cbnoGl5qk54qID8I4QFt')
+        .collection('textChannel')
+        .orderBy('timestamp', 'asc')
+        .onSnapshot(snapshot => {
+            dispatch(setChannels(snapshot.docs.map(doc => ({
+              id: doc.id,
+              data: doc.data()
+          }))))
+        })
       }
       else {
         dispatch(logout())

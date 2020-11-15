@@ -8,7 +8,8 @@ const Message = forwardRef(({username, message, dateSent, userPhoto, isUser, mes
     const messageRef =useRef(null);
     const scrollDown =() => {
         messageRef.current.scrollIntoView({
-            behavior: "smooth"
+            behavior: "smooth",
+            inline: 'center',
         });
     }
 
