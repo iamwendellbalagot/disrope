@@ -34,7 +34,6 @@ const Home = () => {
     const [userImage, setUserImage] = useState(null);
     const [userImageURL, setUserImageURL] = useState(user?.userPhoto? user.userPhoto : '');
 
-    
     const [modalStatus, setModalStatus] = useState(false);
     const [createChannelSt, setCreateChannelSt] = useState(false);
     const [editServer, setEditServer] = useState(false);
