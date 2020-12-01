@@ -42,14 +42,6 @@ const Home = () => {
     const [joinServerInput, setJoinServerInput] = useState('');
     const [members, setMembers] = useState([]);
 
-    // useEffect(() => {
-    //     if(user){
-    //         userServers.forEach(us => {
-    //             console.log(us.id)
-    //         })
-    //     }
-    // }, [user])
-
     useEffect(() => {
         if(!modalStatus){
             setJoinServer(false);
