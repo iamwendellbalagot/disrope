@@ -45,7 +45,6 @@ const AppBody = ({handleDrawer}) => {
         setMessages([]);
     },[selectedServer]);
 
-
     return (
         <div className='appbody'>
             {!drawer?<ArrowRightIcon onClick={() => {setDrawer(true); handleDrawer(true)}} />
@@ -71,8 +70,7 @@ const AppBody = ({handleDrawer}) => {
                             dateSent = {message.data.timestamp}
                             isUser = {message.data.userUID === user.userUID}
                             messageType={message.data.type}
-                            />
-                        
+                            />        
                     ))}
                 </FlipMove>
             </div>
