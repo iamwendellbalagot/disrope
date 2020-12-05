@@ -18,7 +18,6 @@ const Credentials = () => {
         .catch(err => {
             setError(err.code)
         })
-        
     }
 
     const googleSignIn = () =>{
