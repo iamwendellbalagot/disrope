@@ -18,7 +18,6 @@ const Members = ({members}) => {
                         <span>{member.data.username? member.data.username: 'no username'}</span>
                     </div>
                 ))}
-               
             </div>
         </div>
     )
