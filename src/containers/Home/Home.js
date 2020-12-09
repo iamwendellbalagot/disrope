@@ -125,8 +125,6 @@ const Home = () => {
     }
 
     const handleJoinServer = (id) => {
-        console.log('Joining Server: ', joinServerInput);
-
         db.collection('server')
         .doc(id)
         .update({
