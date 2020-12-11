@@ -130,7 +130,6 @@ const Input = () => {
         }
     }
     
-
     return (
         <div className='input'>
             <form className='input__form' onSubmit={handleSubmit}>
@@ -153,8 +152,7 @@ const Input = () => {
                 <div style={{position:'absolute', right: '200px', bottom:'70px'}}>
                     <Picker onSelect={addEmoji} />
                 </div>: null}
-                
-                    
+                     
             </form>
             {openGifPicker && selectedChannel?<div style={{position:'absolute', bottom:'70px', right: '200px'}}>
                 <ReactGiphySearchbox 
@@ -162,7 +160,6 @@ const Input = () => {
                     onSelect={addGif} />
             </div>: null}
         </div>
-        
     )
 }
 export default Input
